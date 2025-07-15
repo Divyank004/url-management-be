@@ -56,7 +56,9 @@ func setupRouter() *gin.Engine {
 
 	// Initialize database
 	config.ConnectDB()
-
+	// Drop existing tables if they exist
+	config.DB.Migrator().DropTable(&models.User{})
+	config.DB.Migrator().DropTable(&models.UrlAnalysisResult{})
 	// Migrate the schema to db 
 	config.DB.AutoMigrate(&models.User{})
 	config.DB.AutoMigrate(&models.UrlAnalysisResult{})
@@ -67,7 +69,6 @@ func setupRouter() *gin.Engine {
 	}
 	// Seed sample data into db 
 	config.DB.Create(&models.User{
-		ID:         1,
 		Name:       "Divyank Dhadi",
 		Email:      "divyank004@gmail.com",
 		Password:   hashedPassword,
@@ -76,29 +77,43 @@ func setupRouter() *gin.Engine {
 	})
 
 	config.DB.Create(&models.UrlAnalysisResult{
-		ID:             1,
 		URL:            "https://google.com",
 		Title:          "Google Search",
 		HTMLVersion:    "HTML5",
 		InternalLinks:  25,
 		ExternalLinks:  12,
-		Status:         "Running",
+		Status:         "Done",
 		LoginForm:      true,
+		BrokenLinks: []models.BrokenLink{
+			{
+				URL:        "https://google.com/broken-link",
+				StatusCode: 404,
+				Type:       "internal",
+			},
+			{
+				URL:        "https://external.com/missing",
+				StatusCode: 500,
+				Type:       "external",
+			},
+		},
+		ValidFrom:  	time.Now(),
+		ValidUntil: 	time.Date(2100, 1, 1, 0, 0, 0, 0, time.UTC),
 	})
 
 	
 	r := gin.Default()
 	r.Use(middleware.CORSMiddleware())
-
-	public := r.Group("/api")
-	public.POST("/login", Login)
-
-	public.GET("/urldata", controllers.GetUrlAnalysisData)
-
 	// Ping test
 	r.GET("/ping", func(c *gin.Context) {
 		c.String(http.StatusOK, "API is running")
 	})
+	public := r.Group("/api")
+	public.POST("/login", Login)
+	public.Use(middleware.AuthMiddleware())
+	public.GET("/urldata", controllers.GetAllUrlsAnalysisData)
+	public.GET("/urldata/:id", controllers.GetSingleUrlAnalysisData)
+	public.POST("/addurl", controllers.AddUrl)
+	
 	return r
 }
 
