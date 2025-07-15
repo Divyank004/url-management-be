@@ -113,7 +113,8 @@ func setupRouter() *gin.Engine {
 	public.GET("/urldata", controllers.GetAllUrlsAnalysisData)
 	public.GET("/urldata/:id", controllers.GetSingleUrlAnalysisData)
 	public.POST("/addurl", controllers.AddUrl)
-	
+	public.GET("/analise/:id", controllers.ReRunAnalysis)
+	public.GET("/analysis/result/:id", controllers.GetURLAnalysisResult)
 	return r
 }
 
