@@ -13,11 +13,13 @@ var DB *gorm.DB
 
 func ConnectDB() {
 	var err error
+	
+	// Get database credentials from environment
 	host := getEnv("DB_HOST", "localhost")
 	port := getEnv("DB_PORT", "5432")
-	user := getEnv("DB_USER", "postgres")
+	user := getEnv("DB_USER", "dd")
 	password := getEnv("DB_PASSWORD", "postgres")
-	dbname := getEnv("DB_NAME", "postgres")
+	dbname := getEnv("DB_NAME", "url_management")
 
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable", 
 		host, user, password, dbname, port)
