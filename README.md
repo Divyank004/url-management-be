@@ -1,6 +1,6 @@
 # URL Management 
 
-A Gin framework based backend server.
+A Gin framework based REST API server.
 
 ## Prerequisites
 * Setup postgres db
