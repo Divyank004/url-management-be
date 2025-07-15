@@ -2,8 +2,18 @@
 
 A Gin framework based REST API server.
 
-## Prerequisites
-* Setup postgres db
+## Setup using Docker (Recommended)
+### Prerequisites
+* Docker daemon should be up and running
+
+run command
+```
+docker-compose up -d
+```
+Server will be up and running on http://localhost:8080
+## Manual setup 
+### Prerequisites
+* Setup postgres db, install and setup go
 
 * create a .env file with below variables
     ```
