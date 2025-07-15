@@ -9,6 +9,7 @@ import (
 	"time"
 	"url-management-be/utils"
 	"url-management-be/middleware"
+	"url-management-be/controllers"
 )
 
 func Login(c *gin.Context) {
@@ -88,11 +89,15 @@ func setupRouter() *gin.Engine {
 	
 	r := gin.Default()
 	r.Use(middleware.CORSMiddleware())
+
 	public := r.Group("/api")
 	public.POST("/login", Login)
+
+	public.GET("/urldata", controllers.GetUrlAnalysisData)
+
 	// Ping test
 	r.GET("/ping", func(c *gin.Context) {
-		c.String(http.StatusOK, "pong")
+		c.String(http.StatusOK, "API is running")
 	})
 	return r
 }
