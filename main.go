@@ -115,6 +115,7 @@ func setupRouter() *gin.Engine {
 	public.POST("/addurl", controllers.AddUrl)
 	public.GET("/analise/:id", controllers.ReRunAnalysis)
 	public.GET("/analysis/result/:id", controllers.GetURLAnalysisResult)
+	public.DELETE("/urldata/:id", controllers.DeleteUrl)
 	return r
 }
 
