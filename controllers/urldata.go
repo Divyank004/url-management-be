@@ -300,8 +300,10 @@ func DeleteUrl(c *gin.Context) {
 		return
 	}
 
-	if err := config.DB.Delete(&urlData).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete URL analysis data"})
+	urldata.ValidUntil = time.Now()
+
+	if err := config.DB.Save(&urldata).Error; err != nil {
+		fmt.Println("error: Failed to update url data", err)
 		return
 	}
 
