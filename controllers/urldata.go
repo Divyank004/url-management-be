@@ -300,9 +300,9 @@ func DeleteUrl(c *gin.Context) {
 		return
 	}
 
-	urldata.ValidUntil = time.Now()
+	urlData.ValidUntil = time.Now()
 
-	if err := config.DB.Save(&urldata).Error; err != nil {
+	if err := config.DB.Save(&urlData).Error; err != nil {
 		fmt.Println("error: Failed to update url data", err)
 		return
 	}
